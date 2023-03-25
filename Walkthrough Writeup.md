@@ -164,3 +164,123 @@ cat data8
 </pre>
 <br><br>
 With this command we get the password for bandit level Thirteen: wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+
+<br></br>
+<h1> Level Thirteen ---> Level Fourteen </h1>
+The password for the next level is stored in /etc/bandit_pass/bandit14 and can only be read by user bandit14. For this level, you don’t get the next password, but you get a private SSH key that can be used to log into the next level. Note: localhost is a hostname that refers to the machine you are working on
+<br></br>
+We can tell by the level description that we need to figure out a way to ssh into the next level to find the password via the private key. So first we read the man pages to figure out that we need the -i argument to specfiy the key and then we can simply ssh into the user: bandit 14 on the local host.
+<pre>
+man ssh
+ssh bandit14@localhost -i sshkey.private (didn't work)
+ssh bandit14@localhost -i sshkey.private -p 2220 (needed to specify the correct port number)
+cat /etc/bandit_pass/bandit14
+</pre>
+<br><br>
+With this command we get the password for bandit level Fourteen: fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+
+<br></br>
+<h1> Level 14 ---> 15  </h1>
+The password for the next level can be retrieved by submitting the password of the current level to port 30000 on localhost.
+<br></br>
+Seeing as we're already logged in as bandit14 we can go ahead and submit the password we just got to the localhost on port 30000 by utilizing nc.
+<pre>
+nc localhost 30000
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+</pre>
+<br><br>
+With this command we get the password for bandit level 15: jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+<br></br>
+<h1> Level 15 ---> 16  </h1>
+The password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
+
+Helpful note: Getting “HEARTBEATING” and “Read R BLOCK”? Use -ign_eof and read the “CONNECTED COMMANDS” section in the manpage. Next to ‘R’ and ‘Q’, the ‘B’ command also works in this version of that command…
+<br></br>
+This level is pretty self explanatory like the last level but because I'm unsure on how I have to format the command I will run openssl s_client -help.
+<pre>
+openssl s_client localhost:30001
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+</pre>
+<br><br>
+With this command we get the password for bandit level 16: JQttfApK4SeyHwDlI9SXGR50qclOAil1
+
+<br></br>
+<h1> Level 16 ---> 17  </h1>
+The credentials for the next level can be retrieved by submitting the password of the current level to a port on localhost in the range 31000 to 32000. First find out which of these ports have a server listening on them. Then find out which of those speak SSL and which don’t. There is only 1 server that will give the next credentials, the others will simply send back to you whatever you send to it.
+<br></br>
+<pre>
+nmap localhost -sV -p31000-32000 (first tried without -sV and wanted more detail on which services these ports are running)
+openssl s_client localhost:31518 (input password - didn't work)
+openssl s_client localhost:31960 (did work)
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+</pre>
+<br><br>
+With this command we get the password for bandit level 17: 
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+To connect to level 17 use this rsa key by creating a file with this key in it, changing permissions so that it is protectecd (chmod 500), then using the file to ssh. Ex. ssh bandit17@bandit.labs.overthewire.org -i bandit17.key -p 2220
+
+<br></br>
+<h1> Level 17 ---> 18  </h1>
+There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+
+NOTE: if you have solved this level and see ‘Byebye!’ when trying to log into bandit18, this is related to the next level, bandit19
+<br></br>
+This level is pretty easy. based on the description we must use the diff command and with that we get the password for the next level.
+<pre>
+diff passwords.old passwords.new
+</pre>
+<br><br>
+With this command we get the password for bandit level 18: hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+
+<br></br>
+<h1> Level 18 ---> 19  </h1>
+The password for the next level is stored in a file readme in the homedirectory. Unfortunately, someone has modified .bashrc to log you out when you log in with SSH.
+<br></br>
+This level is pretty tricky. However we can bypass the logoff by putting cat readme in the same line as the ssh command. This will allow me to read the file and get the password for the next level despite being automatically logged off.
+<pre>
+ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme
+</pre>
+<br><br>
+With this command we get the password for bandit level 19: awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+
+<br></br>
+<h1> Level 19 ---> 20  </h1>
+To gain access to the next level, you should use the setuid binary in the homedirectory. Execute it without arguments to find out how to use it. The password for this level can be found in the usual place (/etc/bandit_pass), after you have used the setuid binary.
+<br></br>
+This level can be tricky if you forget to run the command with ./  Once you run bandit20-do it becomes clear that it will allow you to act as user: bandit20 which lets us read the password for the next level in bandit_pass/bandit20.
+<pre>
+ls -al
+./bandit20-do
+./bandit20-do cat /etc/bandit_pass/bandit20
+</pre>
+<br><br>
+With this command we get the password for bandit level 20: VxCazJaVykI6W36BkBU0mJTCM8rR95XT
