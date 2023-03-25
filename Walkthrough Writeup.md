@@ -95,21 +95,23 @@ With this command we get the password for bandit level Eight: TESKZC0XvTetK0S9xN
 <h1> Level Eight ---> Level Nine </h1>
 The password for the next level is stored in the file data.txt and is the only line of text that occurs only once
 <br></br>
+This level is similar to the previous level in that we must search for the password within the text file but this time we must first sort it and then use the uniq command.
 <pre>
 sort data.txt | uniq -u
 </pre>
 <br><br>
-With this command we get the password for bandit level Nine:
+With this command we get the password for bandit level Nine: EN632PlfYiZbn3PhVK3XOGSlNInNE00t
 
 <br></br>
 <h1> Level Nine ---> Level Ten </h1>
 The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.
 <br></br>
+Again, we have to search within the file but because the file is a data file, a grep command alone will not be enough. We must extract whatever strings we can from the data.txt file and then pipe it and grep for "======".
 <pre>
 strings data.txt | grep '======'
 </pre>
 <br><br>
-With this command we get the password for bandit level Ten:
+With this command we get the password for bandit level Ten: G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
 
 <br></br>
 <h1> Level Ten ---> Level Eleven </h1>
