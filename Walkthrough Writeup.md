@@ -78,4 +78,87 @@ cat ./var/lib/dpkg/info/bandit7.password
 </pre>
 There was a roadblock on this level with permissions being denied when searching for the file but due to previous experience, I was able to bypass this with 2>/dev/null
 <br><br>
-With this command we get the password for bandit level Six: z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+With this command we get the password for bandit level Seven: z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+
+<br></br>
+<h1> Level Seven ---> Level Eight </h1>
+The password for the next level is stored in the file data.txt next to the word millionth
+<br></br>
+So based on the level description we know we have to search for the password within the text file and to do this we're going to use grep and search for 'millionth'
+<pre>
+grep 'millionth' data.txt
+</pre>
+<br><br>
+With this command we get the password for bandit level Eight: TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+
+<br></br>
+<h1> Level Eight ---> Level Nine </h1>
+The password for the next level is stored in the file data.txt and is the only line of text that occurs only once
+<br></br>
+<pre>
+sort data.txt | uniq -u
+</pre>
+<br><br>
+With this command we get the password for bandit level Nine:
+
+<br></br>
+<h1> Level Nine ---> Level Ten </h1>
+The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.
+<br></br>
+<pre>
+strings data.txt | grep '======'
+</pre>
+<br><br>
+With this command we get the password for bandit level Ten:
+
+<br></br>
+<h1> Level Ten ---> Level Eleven </h1>
+The password for the next level is stored in the file data.txt, which contains base64 encoded data.
+<br></br>
+Based on the level description the file is base64 encoded so to find the password we will use the base64 command but with the -d argument to decode the file.
+<pre>
+base64 -d data.txt
+</pre>
+<br><br>
+With this command we get the password for bandit level Eleven: 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
+
+<br></br>
+<h1> Level Eleven ---> Level Twelve </h1>
+The password for the next level is stored in the file data.txt, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions
+<br></br>
+To complete this level as simply as possible, we're going to utilze the resource link which links us to a wiki page on ROT13. We're going to copy and paste the tr command for rot13 and use this command on the file to rotate the letters again that way we get the original text.
+<pre>
+cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+</pre>
+<br><br>
+With this command we get the password for bandit level Twelve: JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
+
+<br></br>
+<h1> Level Twelve ---> Level Thirteen </h1>
+The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under /tmp in which you can work using mkdir. For example: mkdir /tmp/myname123. Then copy the datafile using cp, and rename it using mv (read the manpages!)
+<br></br>
+Completing this level is going to require us to first make our own directory and copy the data.txt file to this directory. Once that is finished, we will start decompressing this file which will require alot of renaming and various decodings of multiple types of encoding. First we start with a hex dump and name it data1.txt. We then see what kind of file it is by using file and based on what it says we rename it according to the compression method and then decode it with the corresponding command. For instance if a file is said to be gzip then we name it to data1.gz and then run gzip -d data1.gz. Then we get the next file we have to decompress and we keep repeating the process untill we eventually get the file: data8 and can read it to get the password.
+<pre>
+mkdir /tmp/jurami
+cp data.txt /tmp/jurami
+xxd -r data.txt data1.txt
+mv data1.txt data1.gz
+gzip -d data1.gz
+mv data1 data2.bz2
+bzip2 -d data2.bz2
+mv data2 data3.gz
+gzip -d data3.gz
+mv data3 data3.tar
+tar -xvf data3.tar
+mv data5.bin data5.tar
+tar -xvf data5.tar
+mv data6.bin data6.bz2
+bzip2 -d data6.bz2
+mv data6 data6.tar
+tar -xvf data6.tar
+mv data8.bin data8.gz
+gzip -d data8.gz
+cat data8
+</pre>
+<br><br>
+With this command we get the password for bandit level Thirteen: wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
