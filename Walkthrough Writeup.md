@@ -284,3 +284,43 @@ ls -al
 </pre>
 <br><br>
 With this command we get the password for bandit level 20: VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+
+<br></br>
+<h1> Level 20 ---> 21  </h1>
+There is a setuid binary in the homedirectory that does the following: it makes a connection to localhost on the port you specify as a commandline argument. It then reads a line of text from the connection and compares it to the password in the previous level (bandit20). If the password is correct, it will transmit the password for the next level (bandit21).
+
+NOTE: Try connecting to your own network daemon to see if it works as you think
+<br></br>
+To solve Bandit Level 20 → Level 21, you need to connect to a server listening on a localhost port, and send a specific string to it. Once you send the correct string, the server will respond with the password for the next level.
+<pre>
+echo 'VxCazJaVykI6W36BkBU0mJTCM8rR95XT' | nc -lp 7802
+./suconnect 7802
+</pre>
+<br><br>
+With this command we get the password for bandit level 21: NvEJF7oVjkddltPSrdKEFOllh9V1IBcq
+
+<br></br>
+<h1> Level 21 ---> 22  </h1>
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+<br></br>
+This level is simple in that all we must do is analyze what files are being used for the cron job and then read them.
+<pre>
+cat /etc/cron.d/cronjob_bandit22
+cat /usr/bin/cronjob_bandit22.sh
+cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+</pre>
+<br><br>
+With this command we get the password for bandit level 22: WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+
+<br></br>
+<h1> Level 22 ---> 23  </h1>
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+
+NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are having problems understanding what it does, try executing it to see the debug information it prints.
+<br></br>
+
+<pre>
+
+</pre>
+<br><br>
+With this command we get the password for bandit level 22: 
