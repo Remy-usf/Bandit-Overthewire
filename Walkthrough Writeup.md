@@ -318,9 +318,12 @@ A program is running automatically at regular intervals from cron, the time-base
 
 NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are having problems understanding what it does, try executing it to see the debug information it prints.
 <br></br>
-
+This level will be similar but instead of running the scripts, we're just going to grab the file name we need by running the command specified in the script and will get the correct file name by manipulating the file to variable to be bandit23 instead of $myname.
 <pre>
-
+cat /etc/cron.d/cronjob_bandit23
+cat /usr/bin/cronjob_bandit23.sh
+echo "I am user bandit 23" | md5sum | cut -d ' ' -f 1
+cat /tmp/8ca319486bfbbc3663ea0fbe8132634
 </pre>
 <br><br>
-With this command we get the password for bandit level 22: 
+With this command we get the password for bandit level 23: QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
