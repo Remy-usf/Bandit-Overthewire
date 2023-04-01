@@ -475,6 +475,8 @@ git push (insert password)
 With this command we get the password for bandit level 32: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y
 
 <br></br>
+<h1> Level 32 ---> 33  </h1>
+<br></br>
 After all this git stuff its time for another escape. Good luck!
 <br></br>
 In this level, when we ssh into bandit32, we can see that we are stuck in uppercase shell where all our commands are capitalized. To break out of this we will use $0. Once we're out of the shell we can use whoami to see we are bandit33 and can read the password for bandit33 in /etc/bandit_pass/bandit33
