@@ -152,7 +152,8 @@ mv data2 data3.gz
 gzip -d data3.gz
 mv data3 data3.tar
 tar -xvf data3.tar
-mv data5.bin data5.tar
+mv data5.
+data5.tar
 tar -xvf data5.tar
 mv data6.bin data6.bz2
 bzip2 -d data6.bz2
@@ -347,3 +348,140 @@ cat /var/spool/bandit24/foo/password.txt (make sure to wait a couple seconds if 
 </pre>
 <br><br>
 With this command we get the password for bandit level 24: VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
+
+<br></br>
+<h1> Level 24 ---> 25  </h1>
+A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
+You do not need to create new connections each time
+<br></br>
+Based on the level description we know that we have to brute force the password for the daemon. Because I know the best way is not to manually insert each combination of password, I know to utilize a for loop which will allow me to input every single combination in the matter of seconds. Thus, I can simply utilize the command line to list each combination next to the previous level's password in one single line then I can pipe the output into the daemon that is listening on port 30002.
+<pre>
+for i in {0000..9999};do echo VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar $i;done | nc localhost 30002
+</pre>
+<br><br>
+With this command we get the password for bandit level 25: p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d
+
+<br></br>
+<h1> Level 25 ---> 26  </h1>
+Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not /bin/bash, but something else. Find out what it is, how it works and how to break out of it.
+<br></br>
+So once logged in as bandit 25, we get the rsa key for bandit26. Let's use it to login into bandit26. We are immediately logged out upon logging in but a way around this is to make the window as small as possible before logging in. After doing that we are now logged in so all that needs to be done in order to escape the current shell is to enter vim mode and set the shell to /bin/bash.
+<pre>
+ssh bandit25@bandit.labs.overthewire.org -p 2220
+ssh bandit26@localhost -p 2220 -i bandit26.sshkey (will not work unless you make your terminal window really small)
+Press 'v' to enter vim then hit esc key
+:set shell:/bin/bash
+:shell
+</pre>
+<br><br>
+With these commands we are now logged into bandit26
+
+<br></br>
+<h1> Level 26 ---> 27  </h1>
+Good job getting a shell! Now hurry and grab the password for bandit27!
+<br></br>
+<pre>
+ls -al
+./bandit27-do cat /etc/bandit_pass/bandit27
+</pre>
+<br><br>
+With this command we get the password for bandit level 27: YnQpBuifNMas1hcUFk70ZmqkhUU2EuaS
+
+<br></br>
+<h1> Level 27 ---> 28  </h1>
+There is a git repository at ssh://bandit27-git@localhost/home/bandit27-git/repo. The password for the user bandit27-git is the same as for the user bandit27.
+
+Clone the repository and find the password for the next level.
+<br></br>
+We are told to clone the repository so we will do that using the git-clone command which can be found in the manual for git.
+<pre>
+mkdir /tmp/jurami && cd /tmp/jurami
+git clone ssh://bandit27-git@localhost/home/bandit27-git/repo (doesn't work for some reason)
+git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo (need to specify port number)
+cd repo
+cat README
+</pre>
+<br><br>
+With this command we get the password for bandit level 28: AVanL161y9rsbcJIsFHuw35rjaOM19nR
+
+<br></br>
+<h1> Level 28 ---> 29  </h1>
+There is a git repository at ssh://bandit28-git@localhost/home/bandit28-git/repo. The password for the user bandit28-git is the same as for the user bandit28.
+
+Clone the repository and find the password for the next level.
+<br></br>
+upon cloning the repo and inspecting the readme file I start trying to figure out the password by checking logs. Upon inspection of logs I see that there were 3 different commits: one intial commit, a second one where they added info, and a third one where they fixed the information leak. This lets me know to inspect the difference between the current commit and the one prior to the fixation of information leak. I do this by using git diff and then the commit id.
+<pre>
+mkdir /tmp/jurami2 && cd /tmp/jurami
+git clone ssh://bandit28-git@localhost:2220/home/bandit28-git/repo
+cd repo
+cat README.md
+git log
+git diff 6c3c5e485cc531e5d52c321587ce1103833ab7c3
+</pre>
+<br><br>
+With this command we get the password for bandit level 29: tQKvmcwNYcFS6vmPHIUSI3ShmsrQZK8S
+
+<br></br>
+<h1> Level 29 ---> 30  </h1>
+There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo. The password for the user bandit29-git is the same as for the user bandit29.
+
+Clone the repository and find the password for the next level.
+<br></br>
+This level is pretty similar to previous except that it requires me to switch branches to find the password information so first I need to figure out what branches are there (this done via git branch -a) and then I need to know how to switch commands (git switch). Also instead of running a manual diff command I found an easier way of doings things with the git show command.
+<pre>
+mkdir /tmp/jurami3 && cd /tmp/jurami3
+git clone ssh://bandit29-git@localhost:2220/home/bandit29-git/repo 
+cd repo
+cat README.md
+git show
+git branch -a
+git switch dev
+git log
+git show
+</pre>
+<br><br>
+With this command we get the password for bandit level 30: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+
+<br></br>
+<h1> Level 30 ---> 31  </h1>
+There is a git repository at ssh://bandit30-git@localhost/home/bandit30-git/repo. The password for the user bandit30-git is the same as for the user bandit30.
+
+Clone the repository and find the password for the next level.
+<br></br>
+This level is again very similar so once we clone the repository we're going to approach it the same way as the others and that's by viewing the git log and seeing if there are any other branches. In this case there are not so let's look at some other git commands in the manual pages. One we haven't used yet that will help us get this level's password is git tag. once we use it we find a secret tag and we're able to use git show to view the contents of this tag.
+<pre>
+git tag
+git show secret
+</pre>
+<br><br>
+With this command we get the password for bandit level 31: OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+
+<br></br>
+<h1> Level 31 ---> 32  </h1>
+There is a git repository at ssh://bandit31-git@localhost/home/bandit31-git/repo. The password for the user bandit31-git is the same as for the user bandit31.
+
+Clone the repository and find the password for the next level.
+<br></br>
+Again, for this level we will clone the repository and inspect the logs. We get a note instructing us to push a file name "key.txt". To do this we must use git add -f, then git commit, and then git push.
+<pre>
+git show
+nano key.txt (write "May I come in?")
+git add key.txt -f
+git commit key.txt (write whatever into the nano)
+git push (insert password)
+</pre>
+<br><br>
+With this command we get the password for bandit level 32: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y
+
+<br></br>
+After all this git stuff its time for another escape. Good luck!
+<br></br>
+In this level, when we ssh into bandit32, we can see that we are stuck in uppercase shell where all our commands are capitalized. To break out of this we will use $0. Once we're out of the shell we can use whoami to see we are bandit33 and can read the password for bandit33 in /etc/bandit_pass/bandit33
+<pre>
+$0
+whoami
+cat /etc/bandit_pass/bandit33
+</pre>
+<br><br>
+With this command we get the password for bandit level 33: odHo63fHiFqcWWJG9rLiLDtPm45KzUKy
